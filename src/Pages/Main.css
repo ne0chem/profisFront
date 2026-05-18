@@ -1,0 +1,971 @@
+/* ============================================ */
+/* ROOT (ваши переменные)                       */
+/* ============================================ */
+:root {
+  --bg-base: linear-gradient(135deg, #e8e9f0 0%, #d4d6e2 100%);
+  --glass-bg: rgba(255, 255, 255, 0.68);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+  --glass-blur: blur(12px);
+  --accent-positive: #1c6f3c;
+  --radius-lg: 20px;
+  --radius-sm: 20px;
+  --shadow-glass:
+    0 8px 32px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+/* ============================================ */
+/* ОБЩИЕ СТИЛИ ДЛЯ СТРАНИЦЫ                     */
+/* ============================================ */
+body {
+  background: var(--bg-base);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+    sans-serif;
+  margin: 0;
+  padding: 24px;
+  min-height: 100vh;
+}
+
+/* ============================================ */
+/* ХЕДЕР СТРАНИЦЫ                               */
+/* ============================================ */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  padding: 20px 24px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-lg);
+  border: var(--glass-border);
+  box-shadow: var(--shadow-glass);
+}
+
+.page-title {
+  font-size: 26px;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  background: linear-gradient(135deg, #1a1d2f 0%, #2d3047 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.add-button {
+  background: var(--accent-positive);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.add-button:hover {
+  background: #145a30;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(28, 111, 60, 0.3);
+}
+
+/* ============================================ */
+/* ТАБЛИЦА (ОСНОВНАЯ)                          */
+/* ============================================ */
+.table-wrapper {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  box-shadow: var(--shadow-glass);
+}
+
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.payment-table th {
+  text-align: left;
+  padding: 16px 16px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  color: #4a4d64;
+  text-transform: uppercase;
+  border-bottom: var(--glass-border);
+}
+
+.expand-header {
+  width: 50px;
+}
+
+/* Строка проекта */
+.project-row {
+  border-bottom: var(--glass-border);
+  transition: all 0.2s;
+}
+
+.project-row:hover {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.expand-cell {
+  width: 50px;
+  text-align: center;
+  padding: 18px 8px;
+  cursor: pointer;
+}
+
+.expand-icon {
+  display: inline-block;
+  font-size: 12px;
+  transition: transform 0.2s;
+  color: #6b6e82;
+}
+
+.expand-icon.expanded {
+  transform: rotate(90deg);
+}
+
+.project-info-cell {
+  padding: 18px 12px;
+}
+
+.project-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.project-title {
+  font-weight: 600;
+  font-size: 17px;
+  color: #1a1d2f;
+  letter-spacing: -0.2px;
+}
+
+.project-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.edit-btn,
+.delete-btn {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px 10px;
+  border-radius: 30px;
+  transition: all 0.2s;
+}
+
+.edit-btn:hover {
+  background: rgba(28, 111, 60, 0.15);
+  transform: scale(1.05);
+}
+
+.delete-btn:hover {
+  background: rgba(220, 53, 69, 0.15);
+  transform: scale(1.05);
+}
+
+.project-description {
+  font-size: 13px;
+  color: #6b6e82;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.project-total-balance {
+  font-size: 14px;
+  color: #d36b46;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Детали (раскрывающаяся часть) */
+.details-row {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+}
+
+.details-cell {
+  padding: 0;
+}
+
+.details-container {
+  padding: 24px 28px;
+  border-top: var(--glass-border);
+  border-bottom: var(--glass-border);
+}
+
+.detail-section {
+  margin-bottom: 28px;
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1d2f;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent-positive);
+  display: inline-block;
+}
+
+/* Сетки и карточки */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-sm);
+  border: var(--glass-border);
+}
+
+.summary-item span {
+  color: #6b6e82;
+  font-size: 13px;
+}
+
+.summary-item strong {
+  color: #1a1d2f;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Авансы и платежи */
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.payment-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-sm);
+  border: var(--glass-border);
+  transition: all 0.2s;
+}
+
+.payment-item:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: translateX(4px);
+}
+
+.payment-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.payment-checkbox input {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-positive);
+}
+
+.status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 30px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.status.paid {
+  color: var(--accent-positive);
+  background: rgba(28, 111, 60, 0.15);
+}
+
+.status.unpaid {
+  color: #c62828;
+  background: rgba(198, 40, 40, 0.1);
+}
+
+.item-name {
+  flex: 1;
+  font-size: 14px;
+  color: #4a4d64;
+}
+
+.item-amount {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1a1d2f;
+  font-family: "SF Mono", monospace;
+}
+
+/* Этапы */
+.stages-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.stage-card {
+  flex: 1;
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-sm);
+  border: var(--glass-border);
+  transition: all 0.2s;
+}
+
+.stage-card:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: translateY(-2px);
+}
+
+.stage-checkbox {
+  cursor: pointer;
+}
+
+.stage-checkbox input {
+  display: none;
+}
+
+.stage-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.stage-status.paid {
+  background: var(--accent-positive);
+  color: white;
+  box-shadow: 0 2px 8px rgba(28, 111, 60, 0.3);
+}
+
+.stage-status.unpaid {
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid #b0b3c8;
+  color: #8e91a8;
+}
+
+.stage-info {
+  flex: 1;
+}
+
+.stage-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4a4d64;
+  margin-bottom: 4px;
+}
+
+.stage-amount {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1d2f;
+  font-family: "SF Mono", monospace;
+}
+
+/* Консультации */
+.consultations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.consultation-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-sm);
+  border: var(--glass-border);
+  transition: all 0.2s;
+}
+
+.consultation-card:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: translateY(-2px);
+  border-color: var(--accent-positive);
+}
+
+.consultation-checkbox {
+  cursor: pointer;
+}
+
+.consultation-checkbox input {
+  display: none;
+}
+
+.consultation-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.consultation-status.paid {
+  background: var(--accent-positive);
+  color: white;
+  box-shadow: 0 2px 8px rgba(28, 111, 60, 0.3);
+}
+
+.consultation-status.unpaid {
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid #b0b3c8;
+  color: #8e91a8;
+}
+
+.consultation-info {
+  flex: 1;
+}
+
+.consultation-month {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1d2f;
+  margin-bottom: 4px;
+}
+
+.consultation-amount {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent-positive);
+  font-family: "SF Mono", monospace;
+}
+
+.consultation-date {
+  font-size: 11px;
+  color: #8e91a8;
+  margin-top: 4px;
+}
+
+.consultations-year-group {
+  margin-bottom: 28px;
+}
+
+.year-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-positive);
+  margin: 20px 0 14px 0;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--accent-positive);
+  display: inline-block;
+}
+
+/* Прогресс-бар */
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 14px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-positive), #5db075);
+  border-radius: 20px;
+  transition: width 0.3s ease;
+}
+
+.progress-badge {
+  float: right;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  padding: 4px 10px;
+  border-radius: 30px;
+  color: #4a4d64;
+}
+
+/* Сводка по проекту */
+.project-summary {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-sm);
+  padding: 18px;
+  margin: 20px 0;
+  border: var(--glass-border);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.summary-row span {
+  font-size: 14px;
+  color: #4a4d64;
+}
+
+.summary-row strong {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.summary-row.paid .paid-amount {
+  color: var(--accent-positive);
+}
+
+.summary-row.remaining .remaining-amount {
+  color: #d36b46;
+  font-size: 18px;
+}
+
+/* Финальная оплата автоматическая */
+.final-payment-auto {
+  background: rgba(28, 111, 60, 0.1);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-top: 18px;
+  border: var(--glass-border);
+}
+
+.final-payment-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.final-payment-amount {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.final-payment-amount span {
+  font-size: 14px;
+  color: #4a4d64;
+}
+
+.final-payment-amount strong {
+  font-size: 20px;
+  color: var(--accent-positive);
+  font-weight: 700;
+}
+
+/* Сводка по этапам */
+.stages-summary {
+  margin-top: 18px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-sm);
+  border: var(--glass-border);
+}
+
+.stages-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.stages-info.paid {
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.4);
+  margin-bottom: 8px;
+  padding-bottom: 10px;
+}
+
+.stages-info.expected {
+  background: rgba(28, 111, 60, 0.1);
+  margin: 10px -8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+}
+
+.stages-info.total-stages {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  margin-top: 8px;
+  padding-top: 10px;
+}
+
+.stages-info strong.mismatch {
+  color: #d36b46;
+}
+
+.warning-badge {
+  background: rgba(255, 193, 7, 0.2);
+  backdrop-filter: blur(4px);
+  color: #856404;
+  padding: 4px 10px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Кнопки */
+.add-stage-btn {
+  background: rgba(40, 167, 69, 0.8);
+  backdrop-filter: blur(4px);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.add-stage-btn:hover {
+  background: #218838;
+  transform: scale(1.02);
+}
+
+.stage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--accent-positive);
+}
+
+.remove-stage-btn {
+  background: rgba(220, 53, 69, 0.8);
+  backdrop-filter: blur(4px);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.remove-stage-btn:hover {
+  background: #c82333;
+}
+
+/* Кружочки оплаты */
+.payment-circle-container {
+  position: relative;
+  display: inline-block;
+}
+
+.payment-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.payment-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.circle-paid {
+  background: var(--accent-positive);
+  border-color: var(--accent-positive);
+  color: white;
+}
+
+.circle-paid-advance {
+  background: #2196f3;
+  border-color: #2196f3;
+  color: white;
+}
+
+.circle-paid-final {
+  background: #9c27b0;
+  border-color: #9c27b0;
+  color: white;
+}
+
+.circle-partial {
+  background: linear-gradient(135deg, var(--accent-positive) 50%, #ffc107 50%);
+  border-color: #ffc107;
+  color: #1a1d2f;
+}
+
+.circle-unpaid {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: #b0b3c8;
+  color: #8e91a8;
+}
+
+.circle-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  background: #1a1d2f;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  white-space: nowrap;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+/* Модальное окно для оплаты этапа */
+.payment-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.payment-modal-content {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 400px;
+  overflow: hidden;
+  border: var(--glass-border);
+  box-shadow: var(--shadow-glass);
+}
+
+.payment-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  background: var(--accent-positive);
+  color: white;
+}
+
+.payment-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.payment-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.payment-modal-close:hover {
+  opacity: 1;
+}
+
+.payment-modal-body {
+  padding: 24px;
+}
+
+.payment-stage-total {
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: var(--glass-border);
+  font-size: 14px;
+  color: #6b6e82;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border: var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.payment-option:hover {
+  border-color: var(--accent-positive);
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateX(4px);
+}
+
+.payment-option span {
+  font-size: 26px;
+}
+
+.payment-option div {
+  flex: 1;
+}
+
+.payment-option strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.payment-option small {
+  font-size: 12px;
+  color: #6b6e82;
+}
+
+.payment-option.advance:hover {
+  border-color: #2196f3;
+  background: rgba(33, 150, 243, 0.1);
+}
+
+.payment-option.final:hover {
+  border-color: #9c27b0;
+  background: rgba(156, 39, 176, 0.1);
+}
+
+.payment-option.full:hover {
+  border-color: var(--accent-positive);
+  background: rgba(28, 111, 60, 0.1);
+}
+
+/* Карточки этапов с кружочками */
+.stage-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.stage-payment-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-sm);
+}
+
+.stage-payment-item .payment-circle {
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  body {
+    padding: 16px;
+  }
+
+  .stages-list {
+    flex-direction: column;
+  }
+
+  .stage-card {
+    min-width: auto;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .checkbox-group {
+    justify-content: flex-start;
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+
+  .month-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .remove-month-btn {
+    align-self: flex-end;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .details-container {
+    padding: 16px;
+  }
+}
