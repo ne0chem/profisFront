@@ -16,15 +16,6 @@
 /* ============================================ */
 /* ОБЩИЕ СТИЛИ ДЛЯ СТРАНИЦЫ                     */
 /* ============================================ */
-body {
-  background: var(--bg-base);
-  font-family:
-    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
-    sans-serif;
-  margin: 0;
-  padding: 24px;
-  min-height: 100vh;
-}
 
 /* ============================================ */
 /* ХЕДЕР СТРАНИЦЫ                               */
