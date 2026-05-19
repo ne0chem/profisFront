@@ -14,10 +14,15 @@ const ConsultationSection = ({ consultations, onTogglePayment }) => {
   const totalCount = validConsultations.length;
   const progress = (totalPaid / totalCount) * 100;
 
-  // Группировка по годам
+  const getYearFromMonth = (month) => {
+    if (!month) return null;
+    const match = month.match(/\b(19|20)\d{2}\b/);
+    return match ? match[0] : null;
+  };
+
+  // Группировка только по реальному году (4 цифры), иначе — одна общая группа
   const consultationsByYear = validConsultations.reduce((acc, consultation) => {
-    const parts = consultation.month?.split(" ") || [];
-    const year = parts[1] || "2024";
+    const year = getYearFromMonth(consultation.month) ?? "all";
     if (!acc[year]) acc[year] = [];
     acc[year].push(consultation);
     return acc;
@@ -26,7 +31,7 @@ const ConsultationSection = ({ consultations, onTogglePayment }) => {
   return (
     <div className="detail-section">
       <div className="section-title">
-        💬 Ежемесячные консультации
+        Ежемесячные консультации
         <span className="progress-badge">
           {totalPaid}/{totalCount} оплачено
         </span>
@@ -39,8 +44,9 @@ const ConsultationSection = ({ consultations, onTogglePayment }) => {
       )}
 
       {Object.entries(consultationsByYear).map(([year, yearConsultations]) => (
+        
         <div key={year} className="consultations-year-group">
-          <div className="year-title">{year}</div>
+          {year !== "all" && <div className="year-title">{year}</div>}
           <div className="consultations-grid">
             {yearConsultations.map((consultation, idx) => (
               <div key={idx} className="consultation-card">
@@ -73,6 +79,7 @@ const ConsultationSection = ({ consultations, onTogglePayment }) => {
             ))}
           </div>
         </div>
+        
       ))}
     </div>
   );

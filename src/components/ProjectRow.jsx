@@ -3,6 +3,12 @@ import ConsultationSection from "./ConsultationSection";
 import PaymentCircle from "./PaymentCircle";
 import PaymentModal from "./PaymentModal";
 import { formatNumber, parseNumber } from "../utils/formatters";
+import {
+  calculateProjectTotals,
+  calculateFinalPaymentDue,
+} from "../utils/projectCalculations";
+import editIcon from '../eddit.svg';
+import deleteIcon from '../del.svg';
 
 const ProjectRow = ({
   project,
@@ -42,10 +48,16 @@ const ProjectRow = ({
       (c) => c.amount && parseNumberLocal(c.amount) > 0,
     );
 
+  const finalPaymentDue = calculateFinalPaymentDue(project.details);
   const hasFinalPayment =
     !validStages.length &&
-    project.details?.finalPayment &&
-    parseNumberLocal(project.details.finalPayment) > 0;
+    (finalPaymentDue > 0 || Boolean(project.details?.finalPaymentIsPaid));
+
+  const { formattedBalance } = calculateProjectTotals(project);
+  const finalPaymentDisplay =
+    finalPaymentDue > 0
+      ? finalPaymentDue
+      : parseNumberLocal(project.details?.finalPayment);
 
   const handleConsultationToggle = (month, currentStatus) => {
     const monthIndex = project.details.consultationsMonthly?.findIndex(
@@ -104,30 +116,29 @@ const ProjectRow = ({
           <div className="project-header-actions">
             <div className="project-title">{project.project}</div>
             <div className="project-actions">
-              <button
-                className="edit-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEdit();
-                }}
-              >
-                ✏️
-              </button>
-              <button
-                className="delete-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete();
-                }}
-              >
-                🗑️
-              </button>
+            <button
+  className="edit-btn"
+  onClick={(e) => {
+    e.stopPropagation();
+    onEdit();
+  }}
+>
+  <img src={editIcon} alt="Edit" className="btn-icon" />
+</button>
+<button
+  className="delete-btn"
+  onClick={(e) => {
+    e.stopPropagation();
+    onDelete();
+  }}
+>
+  <img src={deleteIcon} alt="Delete" className="btn-icon" />
+</button>
             </div>
           </div>
           <div className="project-description">{project.description}</div>
           <div className="project-total-balance">
-            Остаток оплаты:{" "}
-            <strong>{formatNumber(project.totalBalance)} ₽</strong>
+            Остаток оплаты: <strong>{formattedBalance} ₽</strong>
           </div>
         </td>
       </tr>
@@ -137,7 +148,7 @@ const ProjectRow = ({
             <div className="details-container">
               {/* Основные суммы */}
               <div className="detail-section">
-                <div className="section-title">💰 Основные суммы</div>
+                <div className="section-title">Основные суммы</div>
                 <div className="summary-grid">
                   {project.details?.contractCost &&
                     parseNumberLocal(project.details.contractCost) > 0 && (
@@ -184,8 +195,9 @@ const ProjectRow = ({
               {/* Авансы с кружочками */}
               {validAdvances.length > 0 && (
                 <div className="detail-section">
-                  <div className="section-title">💳 Авансы</div>
+                  <div className="section-title">Авансы</div>
                   <div className="items-list">
+                  <div className="summary-grid">
                     {validAdvances.map((advance) => (
                       <div key={advance.id} className="payment-item">
                         <PaymentCircle
@@ -201,6 +213,7 @@ const ProjectRow = ({
                         </span>
                       </div>
                     ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -208,7 +221,7 @@ const ProjectRow = ({
               {/* Финальная оплата */}
               {hasFinalPayment && (
                 <div className="detail-section">
-                  <div className="section-title">🎯 Финальная оплата</div>
+                  <div className="section-title">Финальная оплата</div>
                   <div className="payment-item">
                     <PaymentCircle
                       isPaid={project.details.finalPaymentIsPaid || false}
@@ -219,7 +232,7 @@ const ProjectRow = ({
                     />
                     <span className="item-name">Финальный платёж</span>
                     <span className="item-amount">
-                      {formatNumber(project.details.finalPayment)} ₽
+                      {formatNumber(finalPaymentDisplay)} ₽
                     </span>
                   </div>
                 </div>
@@ -228,7 +241,7 @@ const ProjectRow = ({
               {/* Этапы с расширенными кружочками */}
               {validStages.length > 0 && (
                 <div className="detail-section">
-                  <div className="section-title">📊 Этапы оплаты</div>
+                  <div className="section-title">Этапы оплаты</div>
                   <div className="stages-list-expanded">
                     {validStages.map((stage) => {
                       const status = getStagePaymentStatus(stage);
@@ -238,6 +251,7 @@ const ProjectRow = ({
                             <div className="stage-detail-title">
                               {stage.name}
                             </div>
+                            <div className="ayment-item">
                             <PaymentCircle
                               isPaid={status === "full"}
                               isPartial={status === "partial"}
@@ -245,13 +259,14 @@ const ProjectRow = ({
                               label={`${stage.name} - ${status === "full" ? "Полностью оплачен" : status === "partial" ? "Частично оплачен" : "Не оплачен"}`}
                               type="full"
                             />
+                            </div>
                           </div>
-                          <div className="stage-detail-amount">
-                            💰 {formatNumber(stage.amount)} ₽
+                          <div className="year-title">
+                            Общая сумма этапа: {formatNumber(stage.amount)} ₽
                           </div>
 
-                          <div className="stage-payments">
-                            <div className="stage-payment-item">
+                          <div className="summary-grid">
+                            <div className="payment-item">
                               <PaymentCircle
                                 isPaid={stage.advanceIsPaid || false}
                                 onClick={() =>
@@ -263,13 +278,13 @@ const ProjectRow = ({
                                 label="Аванс этапа"
                                 type="advance"
                               />
-                              <span>🏦 Аванс этапа</span>
-                              <span className="stage-payment-amount">
+                              <span className="item-name">Аванс этапа</span>
+                              <span className="item-amount">
                                 {formatNumber(stage.advanceAmount)} ₽
                               </span>
                             </div>
 
-                            <div className="stage-payment-item">
+                            <div className="payment-item">
                               <PaymentCircle
                                 isPaid={stage.finalIsPaid || false}
                                 onClick={() =>
@@ -281,8 +296,8 @@ const ProjectRow = ({
                                 label="Финальная оплата этапа"
                                 type="final"
                               />
-                              <span>🎯 Финальная оплата этапа</span>
-                              <span className="stage-payment-amount">
+                              <span className="item-name">Финальная оплата этапа</span>
+                              <span className="item-amount">
                                 {formatNumber(stage.finalAmount)} ₽
                               </span>
                             </div>

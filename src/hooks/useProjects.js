@@ -1,25 +1,32 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { formatNumber, parseNumber } from "../utils/formatters";
+import { formatNumber } from "../utils/formatters";
+import { calculateProjectTotals } from "../utils/projectCalculations";
 
-const API_URL = "http://localhost:5000/api";
+const withRecalculatedBalance = (projects) =>
+  projects.map((project) => {
+    const { formattedBalance } = calculateProjectTotals(project);
+    return { ...project, totalBalance: formattedBalance };
+  });
+
+const API_URL = "http://localhost:5001/api";
 
 export const useProjects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openProjectId, setOpenProjectId] = useState(null);
 
-  const fetchProjects = async () => {
+  const fetchProjects = async ({ silent = false } = {}) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const response = await axios.get(`${API_URL}/projects`);
       if (response.data.success) {
-        setProjects(response.data.data);
+        setProjects(withRecalculatedBalance(response.data.data));
       }
     } catch (error) {
       console.error("Error fetching projects:", error);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -36,7 +43,7 @@ export const useProjects = () => {
       await axios.patch(`${API_URL}/projects/${projectId}/stage/${stageId}`, {
         isPaid: !currentStatus,
       });
-      await fetchProjects();
+      await fetchProjects({ silent: true });
     } catch (error) {
       console.error("Error updating stage:", error);
     }
@@ -50,7 +57,7 @@ export const useProjects = () => {
           isPaid: !currentStatus,
         },
       );
-      await fetchProjects();
+      await fetchProjects({ silent: true });
     } catch (error) {
       console.error("Error updating advance:", error);
     }
@@ -78,7 +85,7 @@ export const useProjects = () => {
         consultationsMonthly: updatedMonthly,
       });
 
-      await fetchProjects();
+      await fetchProjects({ silent: true });
     } catch (error) {
       console.error("Error updating consultation:", error);
       alert("Ошибка обновления статуса консультации");
@@ -89,7 +96,7 @@ export const useProjects = () => {
       await axios.patch(`${API_URL}/projects/${projectId}/final-payment`, {
         isPaid: !currentStatus,
       });
-      await fetchProjects();
+      await fetchProjects({ silent: true });
     } catch (error) {
       console.error("Error updating final payment:", error);
       alert("Ошибка обновления статуса финальной оплаты");
@@ -112,7 +119,7 @@ export const useProjects = () => {
       console.log("API response:", response.data); // Для отладки
 
       if (response.data.success) {
-        await fetchProjects();
+        await fetchProjects({ silent: true });
         return true;
       }
       return false;
@@ -133,7 +140,7 @@ export const useProjects = () => {
     if (window.confirm("Удалить проект?")) {
       try {
         await axios.delete(`${API_URL}/projects/${id}`);
-        await fetchProjects();
+        await fetchProjects({ silent: true });
         if (openProjectId === id) setOpenProjectId(null);
         return true;
       } catch (error) {
@@ -152,7 +159,7 @@ export const useProjects = () => {
           isPaid: !currentStatus,
         },
       );
-      await fetchProjects();
+      await fetchProjects({ silent: true });
     } catch (error) {
       console.error("Error updating stage advance:", error);
       alert("Ошибка обновления статуса аванса этапа");
@@ -167,7 +174,7 @@ export const useProjects = () => {
           isPaid: !currentStatus,
         },
       );
-      await fetchProjects();
+      await fetchProjects({ silent: true });
     } catch (error) {
       console.error("Error updating stage final:", error);
       alert("Ошибка обновления статуса финальной оплаты этапа");

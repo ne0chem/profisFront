@@ -3,6 +3,7 @@ import { useProjects } from "../hooks/useProjects";
 import ProjectRow from "../components/ProjectRow";
 import ProjectModal from "../components/ProjectModal";
 import { parseNumber, formatNumber } from "../utils/formatters";
+import { calculateProjectTotals } from "../utils/projectCalculations";
 import "./Main.css";
 
 export default function Main() {
@@ -123,23 +124,18 @@ export default function Main() {
       return;
     }
 
-    const contractAmount = parseNumber(formData.contractCost);
-    const additionalAmount = parseNumber(formData.additionalAgreementCost);
     const consultationsAmount = formData.consultationsMonthly.reduce(
       (sum, c) => sum + parseNumber(c.amount),
       0,
     );
 
     let stagesToSend = [];
-    let stagesAmount = 0;
-    let paidStages = 0;
 
     if (formData.hasStages) {
-      // ВАЖНО: проверяем, что этапы есть и они правильные
       console.log("Создаю этапы для отправки:", formData.stages);
 
       stagesToSend = formData.stages.map((s, index) => ({
-        id: index + 1, // ← гарантируем правильный ID
+        id: index + 1,
         name: s.name || `Этап ${index + 1}`,
         amount: s.amount || null,
         advanceAmount: s.advanceAmount || null,
@@ -148,49 +144,28 @@ export default function Main() {
         finalIsPaid: s.finalIsPaid || false,
       }));
 
-      stagesAmount = stagesToSend.reduce(
-        (sum, s) => sum + parseNumber(s.amount),
-        0,
-      );
-      paidStages = stagesToSend.reduce((sum, s) => {
-        const advancePaid = s.advanceIsPaid ? parseNumber(s.advanceAmount) : 0;
-        const finalPaid = s.finalIsPaid ? parseNumber(s.finalAmount) : 0;
-        return sum + advancePaid + finalPaid;
-      }, 0);
-
       console.log("Отправляемые этапы:", stagesToSend);
     }
 
-    const totalContract =
-      contractAmount + additionalAmount + consultationsAmount + stagesAmount;
-
-    const paidAdvances = formData.advances
-      .filter((a) => a.isPaid && a.amount)
-      .reduce((sum, a) => sum + parseNumber(a.amount), 0);
-
-    const paidConsultations = formData.consultationsMonthly
-      .filter((c) => c.isPaid && c.amount)
-      .reduce((sum, c) => sum + parseNumber(c.amount), 0);
-
-    let finalPaymentAmount = 0;
-    let finalPaymentPaid = false;
-
-    if (!formData.hasStages) {
-      finalPaymentAmount = parseNumber(formData.finalPayment);
-      finalPaymentPaid = formData.finalPaymentIsPaid;
-    }
-
-    const totalPaid =
-      paidAdvances +
-      paidConsultations +
-      paidStages +
-      (finalPaymentPaid ? finalPaymentAmount : 0);
-    const balance = totalContract - totalPaid;
+    const previewProject = {
+      details: {
+        contractCost: formData.contractCost,
+        additionalAgreementCost: formData.additionalAgreementCost,
+        consultationsMonthly: formData.consultationsMonthly,
+        advances: formData.advances,
+        stages: stagesToSend,
+        finalPayment: !formData.hasStages ? formData.finalPayment : null,
+        finalPaymentIsPaid: !formData.hasStages
+          ? formData.finalPaymentIsPaid
+          : false,
+      },
+    };
+    const { balance } = calculateProjectTotals(previewProject);
 
     const projectData = {
       project: formData.projectName,
       description: formData.description,
-      totalBalance: formatNumber(balance > 0 ? balance : 0),
+      totalBalance: formatNumber(balance),
       details: {
         contractCost: formData.contractCost || null,
         additionalAgreementCost: formData.additionalAgreementCost || null,
@@ -205,7 +180,9 @@ export default function Main() {
         finalPayment: !formData.hasStages
           ? formData.finalPayment || null
           : null,
-        finalPaymentIsPaid: !formData.hasStages ? finalPaymentPaid : false,
+        finalPaymentIsPaid: !formData.hasStages
+          ? formData.finalPaymentIsPaid
+          : false,
         advances: formData.advances.map((a) => ({
           id: a.id,
           name: a.name,
@@ -236,7 +213,7 @@ export default function Main() {
   return (
     <div className="container">
       <div className="page-header">
-        <h1 className="page-title">Тип платежа</h1>
+        <h1 className="page-title">Оплата проектов</h1>
         <button className="add-button" onClick={handleAddProject}>
           + Добавить проект
         </button>
@@ -247,7 +224,7 @@ export default function Main() {
           <thead>
             <tr>
               <th className="expand-header"></th>
-              <th>Проект</th>
+              <th>Проекты</th>
             </tr>
           </thead>
           <tbody>

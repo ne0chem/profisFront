@@ -31,6 +31,7 @@
   border-radius: var(--radius-lg);
   border: var(--glass-border);
   box-shadow: var(--shadow-glass);
+
 }
 
 .page-title {
@@ -56,6 +57,7 @@
   backdrop-filter: blur(4px);
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  
 }
 
 .add-button:hover {
@@ -74,10 +76,17 @@
   backdrop-filter: var(--glass-blur);
   border: var(--glass-border);
   box-shadow: var(--shadow-glass);
-}
 
+}
+.btn-icon{
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+
+}
 .payment-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
@@ -92,6 +101,7 @@
   color: #4a4d64;
   text-transform: uppercase;
   border-bottom: var(--glass-border);
+  
 }
 
 .expand-header {
@@ -181,7 +191,7 @@
 
 .project-total-balance {
   font-size: 14px;
-  color: #d36b46;
+  color: var(--text-accent);
   margin-top: 8px;
   font-weight: 500;
 }
@@ -194,16 +204,20 @@
 
 .details-cell {
   padding: 0;
+  width: 100%;
 }
 
 .details-container {
   padding: 24px 28px;
   border-top: var(--glass-border);
   border-bottom: var(--glass-border);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .detail-section {
   margin-bottom: 28px;
+  width: 100%;
 }
 
 .detail-section:last-child {
@@ -397,18 +411,31 @@
 }
 
 /* Консультации */
+.consultations-year-group {
+  width: 100%;
+  margin-bottom: 28px;
+}
+
 .consultations-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
   gap: 12px;
+  width: 100%;
   margin-top: 12px;
 }
 
 .consultation-card {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 14px;
+  flex: 0 0 auto;
+  width: 220px;
+  max-width: 100%;
   padding: 14px;
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(4px);
   border-radius: var(--radius-sm);
@@ -477,10 +504,6 @@
   font-size: 11px;
   color: #8e91a8;
   margin-top: 4px;
-}
-
-.consultations-year-group {
-  margin-bottom: 28px;
 }
 
 .year-title {
@@ -725,20 +748,20 @@
 }
 
 .circle-paid-advance {
-  background: #2196f3;
-  border-color: #2196f3;
+  background: var(--accent-positive);
+  border-color: var(--accent-positive);
   color: white;
 }
 
 .circle-paid-final {
-  background: #9c27b0;
-  border-color: #9c27b0;
+  background: var(--accent-positive);
+  border-color: var(--accent-positive);
   color: white;
 }
 
 .circle-partial {
-  background: linear-gradient(135deg, var(--accent-positive) 50%, #ffc107 50%);
-  border-color: #ffc107;
+  background: linear-gradient(135deg, var(--accent-positive) 50%, #fffffe 50%);
+  border-color: #c8c7c2;
   color: #1a1d2f;
 }
 
@@ -890,14 +913,31 @@
   border-color: var(--accent-positive);
   background: rgba(28, 111, 60, 0.1);
 }
+.stage-payments{
+  display: flex;
+justify-content: space-around;
+
+
+}
 
 /* Карточки этапов с кружочками */
 .stage-detail-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
 }
+
+
+
+.stage-payments span {
+  font-size: 14px;
+}
+
+.stage-payments strong {
+  font-size: 15px;
+}
+
+
 
 .stage-payment-item {
   display: flex;

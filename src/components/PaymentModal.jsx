@@ -40,21 +40,21 @@ const PaymentModal = ({ isOpen, onClose, stage, onConfirm }) => {
               className="payment-option advance"
               onClick={handleAdvanceOnly}
             >
-              <span>🏦</span>
+              <span></span>
               <div>
                 <strong>Только аванс</strong>
                 <small>{formatNumber(stage.advanceAmount)} ₽</small>
               </div>
             </button>
             <button className="payment-option final" onClick={handleFinalOnly}>
-              <span>🎯</span>
+              <span></span>
               <div>
                 <strong>Только финальная оплата</strong>
                 <small>{formatNumber(stage.finalAmount)} ₽</small>
               </div>
             </button>
             <button className="payment-option full" onClick={handleFullPayment}>
-              <span>✓</span>
+              <span></span>
               <div>
                 <strong>Полностью оплатить этап</strong>
                 <small>{formatNumber(stage.amount)} ₽</small>

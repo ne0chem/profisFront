@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { formatNumber, parseNumber } from "../utils/formatters";
+import {
+  calculateFormTotals,
+  calculateFinalPaymentRemaining,
+  calculateTotalDue,
+} from "../utils/projectCalculations";
 
 const ProjectModal = ({
   isOpen,
@@ -59,8 +64,12 @@ const ProjectModal = ({
       .filter((a) => a.isPaid && a.amount)
       .reduce((sum, a) => sum + parseNumber(a.amount), 0);
 
+    const paidConsultations = formData.consultationsMonthly
+      .filter((c) => c.isPaid && c.amount)
+      .reduce((sum, c) => sum + parseNumber(c.amount), 0);
+
     // Остаток к оплате
-    const remaining = totalContract - (paidAdvances + paidStages);
+    const remaining = totalContract - (paidAdvances + paidStages + paidConsultations);
 
     setFormData((prev) => ({
       ...prev,
@@ -74,29 +83,13 @@ const ProjectModal = ({
   const calculateFinalPayment = () => {
     if (formData.hasStages) return;
 
-    const contractAmount = parseNumber(formData.contractCost);
-    const additionalAmount = parseNumber(formData.additionalAgreementCost);
-    const consultationsAmount = formData.consultationsMonthly.reduce(
-      (sum, c) => sum + parseNumber(c.amount),
-      0,
-    );
+    const remaining = calculateFinalPaymentRemaining(formData);
 
-    const totalContract =
-      contractAmount + additionalAmount + consultationsAmount;
-
-    const paidAdvances = formData.advances
-      .filter((a) => a.isPaid && a.amount)
-      .reduce((sum, a) => sum + parseNumber(a.amount), 0);
-
-    const remaining = totalContract - paidAdvances;
-
-    if (remaining >= 0) {
-      setFormData((prev) => ({
-        ...prev,
-        finalPayment: formatNumber(remaining),
-        finalPaymentIsPaid: false,
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      finalPayment: formatNumber(remaining),
+      finalPaymentIsPaid: false,
+    }));
   };
 
   // Добавление нового этапа
@@ -202,18 +195,18 @@ const ProjectModal = ({
     0,
   );
 
-  // Расчёт общей суммы проекта
-  const totalProjectAmount =
-    parseNumber(formData.contractCost) +
-    parseNumber(formData.additionalAgreementCost) +
-    totalConsultations;
+  const totalProjectAmount = calculateTotalDue({
+    contractCost: formData.contractCost,
+    additionalAgreementCost: formData.additionalAgreementCost,
+    consultationsMonthly: formData.consultationsMonthly,
+  });
 
-  // Расчёт оплаченной суммы (авансы общие)
+  const { totalPaid, balance: remainingAmount } = calculateFormTotals(formData);
+
   const paidAdvances = formData.advances
     .filter((a) => a.isPaid && a.amount)
     .reduce((sum, a) => sum + parseNumber(a.amount), 0);
 
-  // Расчёт оплаченных этапов (аванс этапа + финальная часть этапа)
   const paidStages = formData.hasStages
     ? formData.stages.reduce((sum, s) => {
         const advancePaid = s.advanceIsPaid ? parseNumber(s.advanceAmount) : 0;
@@ -221,12 +214,6 @@ const ProjectModal = ({
         return sum + advancePaid + finalPaid;
       }, 0)
     : 0;
-
-  // Общая оплаченная сумма
-  const totalPaid = paidAdvances + paidStages;
-
-  // Остаток к оплате
-  const remainingAmount = totalProjectAmount - totalPaid;
 
   // Сумма всех этапов
   const totalStagesAmount = formData.hasStages
@@ -755,45 +742,15 @@ const ProjectModal = ({
                 </strong>
               </div>
             )}
-            <div className="summary-row paid">
+            <div className="summary-row remaining">
               <span>Остаток к оплате:</span>
-              <strong className="paid-amount">
+              <strong className="remaining-amount">
                 {formatNumber(remainingAmount)} ₽
               </strong>
             </div>
           </div>
 
-          {/* Финальная оплата - только для обычных проектов */}
-          {!formData.hasStages && remainingAmount > 0 && (
-            <div className="form-section final-payment-auto">
-              <h3>🎯 Финальная оплата</h3>
-              <div className="final-payment-info">
-                <div className="final-payment-amount">
-                  <span>Сумма к оплате:</span>
-                  <strong>{formatNumber(remainingAmount)} ₽</strong>
-                </div>
-                <div className="form-group checkbox-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={formData.finalPaymentIsPaid || false}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          finalPaymentIsPaid: e.target.checked,
-                        })
-                      }
-                    />
-                    Оплачен
-                  </label>
-                </div>
-              </div>
-              <div className="checkbox-hint">
-                Финальная сумма рассчитывается автоматически: общая сумма -
-                оплаченные авансы
-              </div>
-            </div>
-          )}
+         
         </div>
 
         <div className="modal-footer">
